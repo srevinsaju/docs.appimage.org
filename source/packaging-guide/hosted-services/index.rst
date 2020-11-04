@@ -10,6 +10,7 @@ There's some hosted services which can help with building AppImages. These servi
 
 .. toctree::
    travis-ci
+   github-ci
    opensuse-build-service
    :caption: Contents
    :maxdepth: 2

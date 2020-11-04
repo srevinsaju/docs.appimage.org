@@ -1,0 +1,36 @@
+name: Build and Deploy
+on:
+  schedule:
+    - cron: '0 * * * *'
+  push:
+    branches:
+      - master
+    paths:
+      - '.github/workflows/build.yml'
+
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v2.3.1 # If you're using actions/checkout@v2 you must set persist-credentials to false in most cases for the deployment to work correctly.
+        with:
+          persist-credentials: false
+    
+      - uses: actions/setup-python@v1
+        with:
+          python-version: 3.8
+
+      - name: Install and Build 🔧 # This example project is built using npm and outputs the result to the 'build' folder. Replace with the commands required to build your project, or remove this step entirely if your site is pre-built.
+        run: |
+          echo $(realpath .)
+          pip3 install -r requirements.txt
+          ./make.sh html
+          
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@3.5.9
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: gh-pages # The branch the action should deploy to.
+          FOLDER: build/html  # The folder the action should deploy.
